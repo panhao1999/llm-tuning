@@ -1,6 +1,6 @@
 # llm-tuning
 
-本项目聚焦于深入探究模型微调原理，选用公开数据集 alpaca_gpt4_data_zh，对 Bloom-1.4B 模型开展微调与推理操作。项目运用的微调技术涵盖 BitFit-tuning、Prompt-tuning、P-tuning、Prefix-tuning 以及 Lora-tuning。
+本项目聚焦于深入探究模型微调原理，选用公开数据集 alpaca_gpt4_data_zh，对 Bloom-1.4B 、Llama-2-7B-ms 模型开展微调训练与推理操作。项目运用的微调技术涵盖 BitFit-tuning、Prompt-tuning、P-tuning、Prefix-tuning 以及 Lora-tuning。
 
 数据集规模约 5 万条，下载链接：https://huggingface.co/datasets/shibing624/alpaca-zh
 
@@ -51,11 +51,27 @@ Bloom 模型以 Transformer 架构为基础构建，Transformer 架构的自注�
 
    将数据集下载至根目录下的data文件中，并下载 Bloom 模型文件。
    
-3. 微调任务执行
+3. Bloom 模型微调执行
 
    执行每个微调任务的代码，这些代码包含了数据加载、数据预处理、模型加载、微调参数配置、模型微调和结果输出等环节。
 
 4. 推理阶段操作
 
    在推理阶段，将原始模型文件与微调监测点进行合并，执行推理任务。
+
+# 半精度训练
+采用 Lora-tuning 对Llama 模型进行微调训练时，为了进一步降低资源占用率，在训练阶段做了一些改变。
+
+1. 在加载模型时，指定参数 torch_dtype 为半精度加载。
+   
+2. 在 lora 配置文件中设置参数 gradient_checkpointing，此时，只有模型中少数关键层的输出会被保存，其他层的输出在需要计算梯度时会根据保存的输入和参数重新计算。这样，在训练过程中，内存中不需要一直保留所有中间层的激活值，大大降低了内存需求，但相应的也会增加训练时间。
+ 
+3. 为了对模型中间层的输出计算梯度。训练阶段采用 enable_input_require_grads 来设置相关张量的梯度计算。
+
+注：
+   
+   · 当采用多批量进行训练时，会增加padding补齐操作，为了避免发生损失不收敛的情况，此时，可设置另一个参数 tokenizer.padding_side = "right"。
+
+   · 使用半精度训练时，adam 优化器 可能会造成 数值下溢出，此时，可在配置文件中调整 adam_epsilon 的数值即可。
+
 
