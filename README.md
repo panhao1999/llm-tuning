@@ -6,7 +6,7 @@
 
 Bloom 模型文件获取地址：https://huggingface.co/Langboat/bloom-1b4-zh
 
-Llama 模型文件获取地址：https://modelscope.cn/models/modelscope/Llama-2-7b-ms/files
+Llama2 模型文件获取地址：https://modelscope.cn/models/modelscope/Llama-2-7b-ms/files
 
 # Bloom模型介绍
 
@@ -50,6 +50,10 @@ Bloom 模型以 Transformer 架构为基础构建，Transformer 架构的自注�
    · 当采用多批量进行训练时，会增加padding补齐操作，为了避免发生损失不收敛的情况，此时，可设置另一个参数 tokenizer.padding_side = "right"。
 
    · 使用半精度训练时，adam 优化器 可能会造成 数值下溢出，此时，可在配置文件中调整 adam_epsilon 的数值即可。
+
+   · Llama2 模型分词器会将非单独存在的 eos_token 切分，因此，对于 eos_token 要单独处理，否则训练后的模型在预测时不知道何时停止。
+
+   · 半精度训练时，正确加入 eos_token 后，要将 pad_token_id 也设置为 eos_token_id，否则模型无法收敛。 
 
 # 操作步骤指南
 1. 核心环境配置
