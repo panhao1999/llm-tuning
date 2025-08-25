@@ -79,7 +79,7 @@ Bloom 模型以 Transformer 架构为基础构建，Transformer 架构的自注�
 
    · Accelerate版本：0.22.0
 
-   · Bitsandbytes版本：0.41.1
+   · Bitsandbytes版本：0.41.1  （https://github.com/jllllll/bitsandbytes-windows-webui/releases/tag/wheels）
 
 3. 数据及模型准备
 
