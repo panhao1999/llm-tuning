@@ -5,6 +5,7 @@
 数据集规模约 5 万条，下载链接：https://huggingface.co/datasets/shibing624/alpaca-zh
 
 Bloom 模型文件获取地址：https://huggingface.co/Langboat/bloom-1b4-zh
+
 Llama 模型文件获取地址：https://modelscope.cn/models/modelscope/Llama-2-7b-ms/files
 
 # Bloom模型介绍
