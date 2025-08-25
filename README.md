@@ -4,13 +4,14 @@
 
 数据集规模约 5 万条，下载链接：https://huggingface.co/datasets/shibing624/alpaca-zh
 
-模型文件获取地址：https://huggingface.co/Langboat/bloom-1b4-zh
+Bloom 模型文件获取地址：https://huggingface.co/Langboat/bloom-1b4-zh
+Llama 模型文件获取地址：https://modelscope.cn/models/modelscope/Llama-2-7b-ms/files
 
 # Bloom模型介绍
 
 Bloom 模型以 Transformer 架构为基础构建，Transformer 架构的自注意力机制能让模型有效处理序列数据中的长距离依赖关系，在自然语言处理任务中表现卓越。Bloom 模型采用了与 GPT 系列相似的解码器（Decoder）架构，使其在生成式任务上具有出色性能。
 
-# 高效微调技术
+# 高效微调
 
 在传统的预训练语言模型微调中，通常需要对模型的所有参数进行更新，对存储和计算上要求较高，特别是对于参数规模巨大的现代语言模型。而高效微调技术，旨在显著减少微调过程中的内存需求，同时保持模型性能。
 
@@ -33,6 +34,21 @@ Bloom 模型以 Transformer 架构为基础构建，Transformer 架构的自注�
 5. Lora-tuning
 
    Lora-tuning 通过矩阵分解的方式，将原本需要跟新的大参数矩阵分解为两个小矩阵。即 W = W + W' = W + BA。实际操作时，需要在矩阵计算中增设一个旁系分支，该旁系分支由两个低秩矩阵A和B组成。训练完成后，可将其与原始模型的权重进行合并，且不会产生额外的推理开销。
+
+# 半精度训练
+采用 Lora-tuning 对Llama 模型进行微调训练时，为了进一步降低资源占用率，在训练阶段做了一些改变。
+
+1. 在加载模型时，指定参数 torch_dtype 为半精度加载。
+   
+2. 在 lora 配置文件中设置参数 gradient_checkpointing，此时，只有模型中少数关键层的输出会被保存，其他层的输出在需要计算梯度时会根据保存的输入和参数重新计算。这样，在训练过程中，内存中不需要一直保留所有中间层的激活值，大大降低了内存需求，但相应的也会增加训练时间。
+ 
+3. 为了对模型中间层的输出计算梯度。训练阶段采用 enable_input_require_grads 来设置相关张量的梯度计算。
+
+注：
+   
+   · 当采用多批量进行训练时，会增加padding补齐操作，为了避免发生损失不收敛的情况，此时，可设置另一个参数 tokenizer.padding_side = "right"。
+
+   · 使用半精度训练时，adam 优化器 可能会造成 数值下溢出，此时，可在配置文件中调整 adam_epsilon 的数值即可。
 
 # 操作步骤指南
 1. 核心环境配置
@@ -58,20 +74,4 @@ Bloom 模型以 Transformer 架构为基础构建，Transformer 架构的自注�
 4. 推理阶段操作
 
    在推理阶段，将原始模型文件与微调监测点进行合并，执行推理任务。
-
-# 半精度训练
-采用 Lora-tuning 对Llama 模型进行微调训练时，为了进一步降低资源占用率，在训练阶段做了一些改变。
-
-1. 在加载模型时，指定参数 torch_dtype 为半精度加载。
-   
-2. 在 lora 配置文件中设置参数 gradient_checkpointing，此时，只有模型中少数关键层的输出会被保存，其他层的输出在需要计算梯度时会根据保存的输入和参数重新计算。这样，在训练过程中，内存中不需要一直保留所有中间层的激活值，大大降低了内存需求，但相应的也会增加训练时间。
- 
-3. 为了对模型中间层的输出计算梯度。训练阶段采用 enable_input_require_grads 来设置相关张量的梯度计算。
-
-注：
-   
-   · 当采用多批量进行训练时，会增加padding补齐操作，为了避免发生损失不收敛的情况，此时，可设置另一个参数 tokenizer.padding_side = "right"。
-
-   · 使用半精度训练时，adam 优化器 可能会造成 数值下溢出，此时，可在配置文件中调整 adam_epsilon 的数值即可。
-
 
