@@ -8,10 +8,6 @@ Bloom 模型文件获取地址：https://huggingface.co/Langboat/bloom-1b4-zh
 
 Llama2 模型文件获取地址：https://modelscope.cn/models/modelscope/Llama-2-7b-ms/files
 
-# Bloom模型介绍
-
-Bloom 模型以 Transformer 架构为基础构建，Transformer 架构的自注意力机制能让模型有效处理序列数据中的长距离依赖关系，在自然语言处理任务中表现卓越。Bloom 模型采用了与 GPT 系列相似的解码器（Decoder）架构，使其在生成式任务上具有出色性能。
-
 # 高效微调
 
 在传统的预训练语言模型微调中，通常需要对模型的所有参数进行更新，对存储和计算上要求较高，特别是对于参数规模巨大的现代语言模型。而高效微调技术，旨在显著减少微调过程中的内存需求，同时保持模型性能。
