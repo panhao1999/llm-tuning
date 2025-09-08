@@ -65,7 +65,7 @@ Llama2 模型文件获取地址：https://modelscope.cn/models/modelscope/Llama-
 # 操作步骤指南
 1. 核心环境配置
 
-   · Python版本：3.11。13
+   · Python版本：3.11.13
 
    · Pytorch版本：2.2.1
 
@@ -81,7 +81,7 @@ Llama2 模型文件获取地址：https://modelscope.cn/models/modelscope/Llama-
 
    将数据集下载至根目录下的data文件中，并下载 Bloom 模型文件。
    
-4. Bloom 模型微调执行
+4. 模型微调执行
 
    执行每个微调任务的代码，这些代码包含了数据加载、数据预处理、模型加载、微调参数配置、模型微调和结果输出等环节。
 
