@@ -18,7 +18,7 @@ Llama2 模型文件获取地址：https://modelscope.cn/models/modelscope/Llama-
    
 2. Prompt-tuning
 
-   Prompt-tuning 旨在设计和优化输入到预训练语言模型的文本提示（prompts），这些提示能够引导模型执行特定任务，比如文本分类、问答等。通过精心构建和微调这些提示，模型可以在不改变自身参数的情况下，适应不同的下游任务。运用 prompt 微调模型时，仅需在训练数据前加入一小段 prompt ，并在模型创建时训练 prompt 的表示层（embedding）。prompt 分为：hard prompt（明确指定具体任务）、soft prompt（随机初始化，让模型自己学习是任务）两类。
+   Prompt-tuning 旨在设计和优化输入到预训练语言模型的文本提示（prompts），这些提示能够引导模型执行特定任务，比如文本分类、问答等。通过精心构建和微调这些提示，模型可以在不改变自身参数的情况下，适应不同的下游任务。运用 prompt 微调模型时，仅需在训练数据前加入一小段 prompt ，并在模型创建时训练 prompt 的表示层（embedding）。prompt 分为：hard prompt（明确指定具体任务）、soft prompt（随机初始化，让模型自己学习任务）两类。
    
 3. P-tuning
 
